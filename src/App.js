@@ -14,21 +14,27 @@ class App extends Component {
       videos: [],
       selectedVideo: null};
 
+    this.videoSearch('surfing');
+
+  }
+
+  videoSearch(term){
     // ES6 resolves { videos } to { videos: videos }
-    YTSearch({key: secrets.YOUTUBE_API_KEY, term: 'surfboards'}, videos => {
+    YTSearch({key: secrets.YOUTUBE_API_KEY, term: term}, videos => {
       this.setState({
         videos: videos,
         selectedVideo: videos[0]})
     });
-
   }
 
   render() {
     return (
       <div className="App">
-        <SearchBar />
-        <VideoDetail video={ this.state.selectedVideo } />
-        <VideoList videos={ this.state.videos } />
+        <SearchBar onSearch={searchTerm => this.videoSearch(searchTerm)}/>
+        <VideoDetail video={this.state.selectedVideo} />
+        <VideoList
+          videos={this.state.videos}
+          onVideoSelect={selectedVideo => this.setState({selectedVideo})}/>
       </div>
     );
   }
